@@ -2,6 +2,7 @@ package com.project.device.model;
 
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
