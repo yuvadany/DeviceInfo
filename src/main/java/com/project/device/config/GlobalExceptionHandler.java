@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
         errorBody.put("timestamp", LocalDateTime.now());
         errorBody.put("error", ex.getMessage());
         errorBody.put("status", HttpStatus.NOT_FOUND.value());
-
         return new ResponseEntity<>(errorBody, HttpStatus.NOT_FOUND);
     }
 }
