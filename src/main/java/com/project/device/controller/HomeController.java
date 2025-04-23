@@ -72,8 +72,12 @@ public class HomeController {
 
 
     @GetMapping("/getAllDevices")
-    public List<Device> getAllDevices() {
-        return deviceService.getAllDevicesInfo();
+    public ResponseEntity<List<Device>> getAllDevices() {
+         List<Device> devices = deviceService.getAllDevicesInfo();
+        if (devices.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(devices);
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
