@@ -23,6 +23,7 @@ public class Device {
     @Column(name = "creation_time", updatable = false)
     private LocalDateTime creationTime;
 
+    //added for the error org.springframework.orm.ObjectOptimisticLockingFailureException: Row was updated or deleted by another transaction
     @Version
     private Integer version;
 
