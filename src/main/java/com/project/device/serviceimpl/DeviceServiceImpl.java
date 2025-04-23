@@ -185,4 +185,15 @@ public class DeviceServiceImpl implements DeviceRepository {
     public List<Device> findByState(String state) {
         return deviceRepository.findByState(state);
     }
+
+    public Optional<Device> updateDevice(Long id, Device updatedDevice) {
+        return deviceRepository.findById(id)
+                .map(existingDevice -> {
+                    existingDevice.setBrand(updatedDevice.getBrand());
+                    existingDevice.setName(updatedDevice.getName());
+                    existingDevice.setState(updatedDevice.getState());
+                    deviceRepository.save(existingDevice);
+                    return existingDevice;
+                });
+    }
 }

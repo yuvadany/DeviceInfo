@@ -43,5 +43,9 @@ public class DeviceService {
     public  void deleteOneDevice(Long id) {
          deviceServiceImpl.deleteById(id);
     }
+
+    public Optional<Device> updateDevice(Long id, Device device) {
+        return deviceServiceImpl.updateDevice(id, device);
+    }
 }
 

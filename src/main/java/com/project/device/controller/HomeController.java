@@ -26,6 +26,13 @@ public class HomeController {
         return deviceService.addDevice(device);
     }
 
+
+    @PutMapping("/updateDevice/{id}")
+    public Device updateDevice(@PathVariable Long id,
+                                         @RequestBody Device updatedDevice) {
+        return deviceService.updateDevice(id,updatedDevice).get();
+    }
+
     @GetMapping("/fetchSingleDevice/{id}")
     public Optional<Device> fetcSingleDevice(@PathVariable Long id) {
         return deviceService.getSingleDevice(id);
