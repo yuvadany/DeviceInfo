@@ -170,7 +170,7 @@ public class DeviceServiceImpl implements DeviceRepository {
         return null;
     }
 
-    @Query(value = "SELECT * FROM public.devices ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    @Override
     public Device findAnyOne() {
         return deviceRepository.findAnyOne();
     }
