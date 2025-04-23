@@ -7,6 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.function.Function;
 public class DeviceServiceImpl implements DeviceRepository {
 
     @Autowired
-    private DeviceRepository repo;
+    private DeviceRepository deviceRepository;
     @Override
     public void flush() {
 
@@ -101,7 +102,7 @@ public class DeviceServiceImpl implements DeviceRepository {
 
     @Override
     public <S extends Device> S save(S entity) {
-        return null;
+        return deviceRepository.save(entity);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class DeviceServiceImpl implements DeviceRepository {
 
     @Override
     public Optional<Device> findById(Long aLong) {
-        return Optional.empty();
+        return deviceRepository.findById(aLong);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class DeviceServiceImpl implements DeviceRepository {
 
     @Override
     public List<Device> findAll() {
-        return repo.findAll();
+        return deviceRepository.findAll();
     }
 
     @Override
@@ -136,7 +137,7 @@ public class DeviceServiceImpl implements DeviceRepository {
 
     @Override
     public void deleteById(Long aLong) {
-
+       deviceRepository.deleteById(aLong);
     }
 
     @Override
@@ -167,5 +168,21 @@ public class DeviceServiceImpl implements DeviceRepository {
     @Override
     public Page<Device> findAll(Pageable pageable) {
         return null;
+    }
+
+    @Query(value = "SELECT * FROM public.devices ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    public Device findAnyOne() {
+        return deviceRepository.findAnyOne();
+    }
+
+    @Override
+    public List<Device> findByBrand(String brand) {
+        return deviceRepository.findByBrand(brand);
+    }
+
+
+    @Override
+    public List<Device> findByState(String state) {
+        return deviceRepository.findByState(state);
     }
 }

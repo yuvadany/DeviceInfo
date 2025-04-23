@@ -23,6 +23,9 @@ public class Device {
     @Column(name = "creation_time", updatable = false)
     private LocalDateTime creationTime;
 
+    @Version
+    private Integer version;
+
     @PrePersist
     protected void onCreate() {
         creationTime = LocalDateTime.now();
