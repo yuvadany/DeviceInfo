@@ -1,5 +1,6 @@
 package com.project.device.config;
 
+import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,5 +20,14 @@ public class GlobalExceptionHandler {
         errorBody.put("error", ex.getMessage());
         errorBody.put("status", HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(errorBody, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DeviceAddingException.class)
+    public ResponseEntity<Map<String, Object>> handleDeviceAddingError(DeviceNotFoundException ex) {
+        Map<String, Object> errorBody = new HashMap<>();
+        errorBody.put("timestamp", LocalDateTime.now());
+        errorBody.put("error", ex.getMessage());
+        errorBody.put("status", HttpStatus.NOT_ACCEPTABLE.value());
+        return new ResponseEntity<>(errorBody, HttpStatus.NOT_ACCEPTABLE);
     }
 }

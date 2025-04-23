@@ -2,12 +2,16 @@ package com.project.device.controller;
 
 import com.project.device.model.Device;
 import com.project.device.service.DeviceService;
+import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/devices")
@@ -17,8 +21,15 @@ public class HomeController {
     private DeviceService deviceService;
 
     @PostMapping("/addDevice")
-    public Device addDevice(@RequestBody Device device) {
-        return deviceService.addDevice(device);
+    public ResponseEntity<Device>  addDevice(@RequestBody Device device) {
+        try {
+            Device savedDevice = deviceService.addDevice(device);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedDevice);
+        } catch (DataIntegrityViolationException e) {
+            throw new DeviceAddingException( Objects.requireNonNull(e.getRootCause()).getMessage());
+        } catch (Exception e) {
+            throw new DeviceAddingException(HttpStatus.INTERNAL_SERVER_ERROR + " "  + e.getMessage());
+        }
     }
 
     @PutMapping("/updateDevice/{id}")
