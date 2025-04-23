@@ -1,12 +1,17 @@
 package com.project.device.controller;
 
 import com.project.device.model.Device;
+import com.project.device.model.ErrorResponse;
 import com.project.device.service.DeviceService;
+import com.project.device.util.DeviceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,9 +39,10 @@ public class HomeController {
     }
 
     @GetMapping("/fetchSingleDevice/{id}")
-    public Optional<Device> fetcSingleDevice(@PathVariable Long id) {
-        return deviceService.getSingleDevice(id);
-
+    public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
+        Device device = deviceService.getSingleDevice(id)
+                .orElseThrow(() -> new DeviceNotFoundException(id));
+        return ResponseEntity.ok(device);
     }
 
     @GetMapping("/fetchOneRandomDevice")
