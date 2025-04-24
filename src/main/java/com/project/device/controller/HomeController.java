@@ -4,6 +4,7 @@ import com.project.device.model.Device;
 import com.project.device.service.DeviceService;
 import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
+import com.project.device.util.TryAgainLaterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -41,8 +42,13 @@ public class HomeController {
     }
 
     @GetMapping("/fetchOneRandomDevice")
-    public Device fetchOneRandomDevice() {
-        return deviceService.getAnyDevice();
+    public ResponseEntity<Device>  fetchOneRandomDevice() {
+        try {
+            Device randomDevice = deviceService.getAnyDevice();
+            return ResponseEntity.status(HttpStatus.OK).body(randomDevice);
+             } catch (Exception e) {
+            throw new TryAgainLaterException(e.getMessage());
+        }
 
     }
 
