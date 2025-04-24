@@ -20,8 +20,8 @@ public interface DeviceService {
 
     public Optional<Device> getSingleDevice(Long id);
 
-    public Long deleteOneDevice(Long id);
+    public boolean deleteOneDevice(Long id,Device selectedDevice);
 
-    public Boolean updateDevice(Device existingDevice, Device device);
+    public boolean updateDevice(Device existingDevice, Device device);
 }
 

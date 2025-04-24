@@ -77,25 +77,30 @@ public class HomeController {
 
     @PutMapping("/updateDevice/{id}")
     public ResponseEntity<String> updateDevice(@PathVariable Long id,
-                               @RequestBody Device newDeviceData) throws DeviceNotFoundException {
+                                               @RequestBody Device newDeviceData) throws DeviceNotFoundException {
         var deviceOptional = deviceService.getSingleDevice(id);
-        if(deviceOptional.isPresent()){
-         if( deviceService.updateDevice(deviceOptional.get(), newDeviceData)){
-             return ResponseEntity.ok("Device ID "+ id +" has been updated" );
-         }else
-         { return ResponseEntity.ok("Device can not be updated when its in state IN_USE ");
-         }
-        }else
+        if (deviceOptional.isPresent()) {
+            if (deviceService.updateDevice(deviceOptional.get(), newDeviceData)) {
+                return ResponseEntity.ok("Device ID " + id + " has been updated");
+            } else {
+                return ResponseEntity.ok("Device can not be updated when its in state IN_USE ");
+            }
+        } else
             throw new DeviceNotFoundException("ID " + id);
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
     public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
-        deviceService.getSingleDevice(id)
-                .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
-        if (Objects.equals(deviceService.deleteOneDevice(id), id))
-            return ResponseEntity.ok("Device with ID " + id + " has been deleted.");
-        else return ResponseEntity.ok("Device with ID " + id + " is in USE and can not be deleted.");
+        var deviceOptional = deviceService.getSingleDevice(id);
+        if (deviceOptional.isPresent()) {
+            if (deviceService.deleteOneDevice(id, deviceOptional.get())) {
+                return ResponseEntity.ok("Device with ID " + id + " has been deleted.");
+            } else {
+                return ResponseEntity.ok("Device with ID " + id + " is in USE and can not be deleted.");
+            }
+        } else
+            throw new DeviceNotFoundException("ID " + id);
+
     }
 
 }

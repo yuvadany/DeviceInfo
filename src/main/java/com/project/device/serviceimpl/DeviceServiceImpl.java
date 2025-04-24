@@ -47,19 +47,18 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Long deleteOneDevice(Long id) {
-        var existingDevice = deviceRepository.findById(id).get();
+    public boolean deleteOneDevice(Long id, Device selectedDevice) {
         if (!"IN_USE".equalsIgnoreCase(String
-                .valueOf(existingDevice.getState()))) {
+                .valueOf(selectedDevice.getState()))) {
             deviceRepository.deleteById(id);
-            return id;
+            return true;
         } else
-            return 0L;
+            return false;
 
     }
 
     @Override
-    public Boolean updateDevice(Device existingDevice, Device newDeviceData) {
+    public boolean updateDevice(Device existingDevice, Device newDeviceData) {
         if (!"IN_USE".equalsIgnoreCase(String
                 .valueOf(existingDevice.getState())) && existingDevice.getState().equals(newDeviceData.getState()) && (
                 !existingDevice.getBrand().equals(newDeviceData.getBrand()) || !existingDevice.getName().equals(newDeviceData.getName()))) {
