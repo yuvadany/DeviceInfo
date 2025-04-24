@@ -3,6 +3,7 @@ package com.project.device.serviceimpl;
 import com.project.device.model.Device;
 import com.project.device.repo.DeviceRepository;
 import com.project.device.service.DeviceService;
+import com.project.device.util.MessageConstants;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean deleteOneDevice(Long id, Device selectedDevice) {
-        if (!"IN_USE".equalsIgnoreCase(String
+        if (!MessageConstants.IN_USE.equalsIgnoreCase(String
                 .valueOf(selectedDevice.getState()))) {
             deviceRepository.deleteById(id);
             return true;
@@ -61,7 +62,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public boolean updateDevice(Device existingDevice, Device newDeviceData) {
-        if (!"IN_USE".equalsIgnoreCase(String
+        if (!MessageConstants.IN_USE.equalsIgnoreCase(String
                 .valueOf(existingDevice.getState())) && existingDevice.getState().equals(newDeviceData.getState()) && (
                 !existingDevice.getBrand().equals(newDeviceData.getBrand()) || !existingDevice.getName().equals(newDeviceData.getName()))) {
             existingDevice.setBrand(newDeviceData.getBrand());

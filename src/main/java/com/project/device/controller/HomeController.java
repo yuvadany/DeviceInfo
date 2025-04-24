@@ -4,6 +4,7 @@ import com.project.device.model.Device;
 import com.project.device.service.DeviceService;
 import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
+import com.project.device.util.MessageConstants;
 import com.project.device.util.TryAgainLaterException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class HomeController {
     @GetMapping("/fetchSingleDevice/{id}")
     public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
         Device device = deviceService.getSingleDevice(id)
-                .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
+                .orElseThrow(() -> new DeviceNotFoundException(MessageConstants.ID + id));
         return ResponseEntity.ok(device);
     }
 
@@ -59,7 +60,7 @@ public class HomeController {
         if (!device.isEmpty())
             return ResponseEntity.ok(device);
         else
-            throw new DeviceNotFoundException("brand " + brand);
+            throw new DeviceNotFoundException(MessageConstants.BRAND + brand);
     }
 
     @GetMapping("/fetchByState")
@@ -68,7 +69,7 @@ public class HomeController {
         if (!device.isEmpty())
             return ResponseEntity.ok(device);
         else
-            throw new DeviceNotFoundException("state " + state);
+            throw new DeviceNotFoundException(MessageConstants.STATE + state);
 
     }
 
@@ -88,12 +89,12 @@ public class HomeController {
         var deviceOptional = deviceService.getSingleDevice(id);
         if (deviceOptional.isPresent()) {
             if (deviceService.updateDevice(deviceOptional.get(), newDeviceData)) {
-                return ResponseEntity.ok("Device ID " + id + " has been updated");
+                return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.UPDATED);
             } else {
-                return ResponseEntity.ok("Device can not be updated when its in state IN_USE ");
+                return ResponseEntity.ok(MessageConstants.DEVICE_IN_USE);
             }
         } else
-            throw new DeviceNotFoundException("ID " + id);
+            throw new DeviceNotFoundException(MessageConstants.ID+ id);
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
@@ -101,12 +102,12 @@ public class HomeController {
         var deviceOptional = deviceService.getSingleDevice(id);
         if (deviceOptional.isPresent()) {
             if (deviceService.deleteOneDevice(id, deviceOptional.get())) {
-                return ResponseEntity.ok("Device with ID " + id + " has been deleted.");
+                return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.DELETED);
             } else {
-                return ResponseEntity.ok("Device with ID " + id + " is in USE and can not be deleted.");
+                return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID+ id + MessageConstants.CAN_NOT_DELETED);
             }
         } else
-            throw new DeviceNotFoundException("ID " + id);
+            throw new DeviceNotFoundException(MessageConstants.ID + id);
 
     }
 
