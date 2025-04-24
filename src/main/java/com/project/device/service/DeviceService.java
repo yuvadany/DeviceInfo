@@ -22,6 +22,6 @@ public interface DeviceService {
 
     public Long deleteOneDevice(Long id);
 
-    public Optional<Device> updateDevice(Long id, Device device);
+    public Boolean updateDevice(Device existingDevice, Device device);
 }
 

@@ -59,15 +59,20 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Optional<Device> updateDevice(Long id, Device updatedDevice) {
-        return deviceRepository.findById(id)
-                .map(existingDevice -> {
-                    existingDevice.setBrand(updatedDevice.getBrand());
-                    existingDevice.setName(updatedDevice.getName());
-                    existingDevice.setState(updatedDevice.getState());
-                    deviceRepository.save(existingDevice);
-                    return existingDevice;
-                });
+    public Boolean updateDevice(Device existingDevice, Device newDeviceData) {
+        if (!"IN_USE".equalsIgnoreCase(String
+                .valueOf(existingDevice.getState())) && existingDevice.getState().equals(newDeviceData.getState()) && (
+                !existingDevice.getBrand().equals(newDeviceData.getBrand()) || !existingDevice.getName().equals(newDeviceData.getName()))) {
+            existingDevice.setBrand(newDeviceData.getBrand());
+            existingDevice.setName(newDeviceData.getName());
+            deviceRepository.save(existingDevice);
+            return true;
+        } else if (!existingDevice.getState().equals(newDeviceData.getState())) {
+            existingDevice.setState(newDeviceData.getState());
+            deviceRepository.save(existingDevice);
+            return true;
+        }
+        return false;
     }
 
 }
