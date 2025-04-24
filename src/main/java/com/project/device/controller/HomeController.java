@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
 @RequestMapping("/v1/devices")
@@ -75,20 +76,26 @@ public class HomeController {
     }
 
     @PutMapping("/updateDevice/{id}")
-    public Device updateDevice(@PathVariable Long id,
-                               @RequestBody Device updatedDevice) {
-        deviceService.getSingleDevice(id)
-                .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
-        return deviceService.updateDevice(id, updatedDevice).get();
+    public ResponseEntity<String> updateDevice(@PathVariable Long id,
+                               @RequestBody Device newDeviceData) throws DeviceNotFoundException {
+        var deviceOptional = deviceService.getSingleDevice(id);
+        if(deviceOptional.isPresent()){
+         if( deviceService.updateDevice(deviceOptional.get(), newDeviceData)){
+             return ResponseEntity.ok("Device ID "+ id +" has been updated" );
+         }else
+         { return ResponseEntity.ok("Device can not be updated when its in state IN_USE ");
+         }
+        }else
+            throw new DeviceNotFoundException("ID " + id);
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
     public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
-            deviceService.getSingleDevice(id)
-                    .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
-            if (Objects.equals(deviceService.deleteOneDevice(id), id))
-                return ResponseEntity.ok("Device with ID " + id + " has been deleted.");
-       else return ResponseEntity.ok("Device with ID " + id + " is in USE and can not be deleted.");
+        deviceService.getSingleDevice(id)
+                .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
+        if (Objects.equals(deviceService.deleteOneDevice(id), id))
+            return ResponseEntity.ok("Device with ID " + id + " has been deleted.");
+        else return ResponseEntity.ok("Device with ID " + id + " is in USE and can not be deleted.");
     }
 
 }
