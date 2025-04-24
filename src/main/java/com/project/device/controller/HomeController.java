@@ -3,6 +3,7 @@ package com.project.device.controller;
 import com.project.device.model.Device;
 import com.project.device.service.DeviceService;
 import com.project.device.util.DeviceAddingException;
+import com.project.device.util.DeviceDeletionException;
 import com.project.device.util.DeviceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -41,7 +42,7 @@ public class HomeController {
     @GetMapping("/fetchSingleDevice/{id}")
     public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
         Device device = deviceService.getSingleDevice(id)
-                .orElseThrow(() -> new DeviceNotFoundException("id = " + id));
+                .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
         return ResponseEntity.ok(device);
     }
 
@@ -57,7 +58,7 @@ public class HomeController {
         if (!device.isEmpty())
             return ResponseEntity.ok(device);
         else
-            throw new DeviceNotFoundException("brand = " + brand);
+            throw new DeviceNotFoundException("brand " + brand);
     }
 
     @GetMapping("/fetchByState")
@@ -66,7 +67,7 @@ public class HomeController {
         if (!device.isEmpty())
             return ResponseEntity.ok(device);
         else
-            throw new DeviceNotFoundException("state = " + state);
+            throw new DeviceNotFoundException("state " + state);
 
     }
 
@@ -81,8 +82,13 @@ public class HomeController {
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
-    public void deleteOneDeviceById(@PathVariable Long id) {
-        deviceService.deleteOneDevice(id);
+    public  ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok("Device with ID " + String.valueOf(deviceService.deleteOneDevice(id)) + " has been deleted.");
+        } catch (Exception ex) {
+            throw  new DeviceDeletionException("id = " + id);
+        }
+
     }
 
 }
