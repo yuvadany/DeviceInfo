@@ -32,12 +32,6 @@ public class HomeController {
         }
     }
 
-    @PutMapping("/updateDevice/{id}")
-    public Device updateDevice(@PathVariable Long id,
-                               @RequestBody Device updatedDevice) {
-        return deviceService.updateDevice(id, updatedDevice).get();
-    }
-
     @GetMapping("/fetchSingleDevice/{id}")
     public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
         Device device = deviceService.getSingleDevice(id)
@@ -78,6 +72,14 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.ok(devices);
+    }
+
+    @PutMapping("/updateDevice/{id}")
+    public Device updateDevice(@PathVariable Long id,
+                               @RequestBody Device updatedDevice) {
+        deviceService.getSingleDevice(id)
+                .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
+        return deviceService.updateDevice(id, updatedDevice).get();
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
