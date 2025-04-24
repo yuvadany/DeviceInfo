@@ -1,51 +1,27 @@
 package com.project.device.service;
 
 import com.project.device.model.Device;
-import com.project.device.serviceimpl.DeviceServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DeviceService {
+public interface DeviceService {
+    public Device addDevice(Device device);
 
-    @Autowired
-    private DeviceServiceImpl deviceServiceImpl;
+    public Device getAnyDevice();
 
-    public Device addDevice(Device device)
-    {
-        return deviceServiceImpl.save(device);
-    }
-    public Device getAnyDevice()
-    {
-        return deviceServiceImpl.findAnyOne();
-    }
+    public List<Device> getDeviceByBrand(String brand);
 
-    public List<Device> getDeviceByBrand(String brand)
-    {
-        return deviceServiceImpl.findByBrand(brand);
-    }
+    public List<Device> getAllDevicesInfo();
 
-    public List<Device> getAllDevicesInfo()
-    {
-        return deviceServiceImpl.findAll();
-    }
+    public List<Device> getDeviceByState(String state);
 
-    public List<Device> getDeviceByState(String state) {
-        return deviceServiceImpl.findByState(state);
-    }
+    public Optional<Device> getSingleDevice(Long id);
 
-    public Optional<Device> getSingleDevice(Long id) {
-        return deviceServiceImpl.findById(id);
-    }
+    public Long deleteOneDevice(Long id);
 
-    public  void deleteOneDevice(Long id) {
-         deviceServiceImpl.deleteById(id);
-    }
-
-    public Optional<Device> updateDevice(Long id, Device device) {
-        return deviceServiceImpl.updateDevice(id, device);
-    }
+    public Optional<Device> updateDevice(Long id, Device device);
 }
 
