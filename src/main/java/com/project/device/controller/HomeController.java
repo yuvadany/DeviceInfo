@@ -6,6 +6,8 @@ import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
 import com.project.device.util.MessageConstants;
 import com.project.device.util.TryAgainLaterException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/devices")
+@Tag(name=MessageConstants.HOME_CONTROLLER,description = MessageConstants.HOME_CONTROLLER_DESCRIPTION)
 public class HomeController {
 
     private final DeviceService deviceService;
@@ -25,6 +28,7 @@ public class HomeController {
     }
 
     @PostMapping("/addDevice")
+    @Operation(summary = MessageConstants.ADD_API)
     public ResponseEntity<Device> addDevice(@RequestBody Device device) {
         try {
             Device savedDevice = deviceService.addDevice(device);
@@ -37,6 +41,7 @@ public class HomeController {
     }
 
     @GetMapping("/fetchSingleDevice/{id}")
+    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_ID)
     public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
         Device device = deviceService.getSingleDevice(id)
                 .orElseThrow(() -> new DeviceNotFoundException(MessageConstants.ID + id));
@@ -44,6 +49,7 @@ public class HomeController {
     }
 
     @GetMapping("/fetchOneRandomDevice")
+    @Operation(summary = MessageConstants.FETCH_ONE_RANDOM_DEVICE)
     public ResponseEntity<Device> fetchOneRandomDevice() {
         try {
             Device randomDevice = deviceService.getAnyDevice();
@@ -55,6 +61,7 @@ public class HomeController {
     }
 
     @GetMapping("/fetchByBrand")
+    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_BRAND)
     public ResponseEntity<List<Device>> fetchDeviceByBrand(@RequestParam String brand) {
         List<Device> device = deviceService.getDeviceByBrand(brand);
         if (!device.isEmpty())
@@ -64,6 +71,7 @@ public class HomeController {
     }
 
     @GetMapping("/fetchByState")
+    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_STATE)
     public ResponseEntity<List<Device>> fetchDeviceByState(@RequestParam String state) {
         List<Device> device = deviceService.getDeviceByState(state);
         if (!device.isEmpty())
@@ -75,6 +83,7 @@ public class HomeController {
 
 
     @GetMapping("/getAllDevices")
+    @Operation(summary = MessageConstants.FETCH_ALL_API)
     public ResponseEntity<List<Device>> getAllDevices() {
         List<Device> devices = deviceService.getAllDevicesInfo();
         if (devices.isEmpty()) {
@@ -84,6 +93,7 @@ public class HomeController {
     }
 
     @PutMapping("/updateDevice/{id}")
+    @Operation(summary = MessageConstants.UPDATE_API)
     public ResponseEntity<String> updateDevice(@PathVariable Long id,
                                                @RequestBody Device newDeviceData) throws DeviceNotFoundException {
         var deviceOptional = deviceService.getSingleDevice(id);
@@ -98,6 +108,7 @@ public class HomeController {
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
+    @Operation(summary = MessageConstants.DELETE_API)
     public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
         var deviceOptional = deviceService.getSingleDevice(id);
         if (deviceOptional.isPresent()) {
