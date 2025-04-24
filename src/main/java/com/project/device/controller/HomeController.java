@@ -5,7 +5,6 @@ import com.project.device.service.DeviceService;
 import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
 import com.project.device.util.TryAgainLaterException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
