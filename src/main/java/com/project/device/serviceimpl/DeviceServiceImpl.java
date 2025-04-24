@@ -3,7 +3,6 @@ package com.project.device.serviceimpl;
 import com.project.device.model.Device;
 import com.project.device.repo.DeviceRepository;
 import com.project.device.service.DeviceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.Optional;
 @Service
 public class DeviceServiceImpl implements DeviceService {
 
-    @Autowired
-    DeviceRepository deviceRepository;
+    private final DeviceRepository deviceRepository;
+
+    public DeviceServiceImpl(DeviceRepository deviceRepository) {
+        this.deviceRepository = deviceRepository;
+    }
 
     @Override
     public Device addDevice(Device device) {

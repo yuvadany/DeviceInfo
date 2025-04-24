@@ -18,8 +18,11 @@ import java.util.Objects;
 @RequestMapping("/v1/devices")
 public class HomeController {
 
-    @Autowired
-    private DeviceService deviceService;
+    private final DeviceService deviceService;
+
+    public HomeController(DeviceService deviceService) {
+        this.deviceService = deviceService;
+    }
 
     @PostMapping("/addDevice")
     public ResponseEntity<Device> addDevice(@RequestBody Device device) {
@@ -41,11 +44,11 @@ public class HomeController {
     }
 
     @GetMapping("/fetchOneRandomDevice")
-    public ResponseEntity<Device>  fetchOneRandomDevice() {
+    public ResponseEntity<Device> fetchOneRandomDevice() {
         try {
             Device randomDevice = deviceService.getAnyDevice();
             return ResponseEntity.status(HttpStatus.OK).body(randomDevice);
-             } catch (Exception e) {
+        } catch (Exception e) {
             throw new TryAgainLaterException(e.getMessage());
         }
 
