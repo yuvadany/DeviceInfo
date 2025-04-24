@@ -15,6 +15,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     DeviceRepository deviceRepository;
+
     @Override
     public Device addDevice(Device device) {
         return deviceRepository.save(device);
@@ -47,8 +48,14 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Long deleteOneDevice(Long id) {
-        deviceRepository.deleteById(id);
-        return id;
+        var existingDevice = deviceRepository.findById(id).get();
+        if (!"IN_USE".equalsIgnoreCase(String
+                .valueOf(existingDevice.getState()))) {
+            deviceRepository.deleteById(id);
+            return id;
+        } else
+            return 0L;
+
     }
 
     @Override

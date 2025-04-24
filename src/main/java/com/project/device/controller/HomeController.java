@@ -3,7 +3,6 @@ package com.project.device.controller;
 import com.project.device.model.Device;
 import com.project.device.service.DeviceService;
 import com.project.device.util.DeviceAddingException;
-import com.project.device.util.DeviceDeletionException;
 import com.project.device.util.DeviceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -74,7 +73,7 @@ public class HomeController {
 
     @GetMapping("/getAllDevices")
     public ResponseEntity<List<Device>> getAllDevices() {
-         List<Device> devices = deviceService.getAllDevicesInfo();
+        List<Device> devices = deviceService.getAllDevicesInfo();
         if (devices.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
@@ -82,13 +81,12 @@ public class HomeController {
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
-    public  ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok("Device with ID " + String.valueOf(deviceService.deleteOneDevice(id)) + " has been deleted.");
-        } catch (Exception ex) {
-            throw  new DeviceDeletionException("id = " + id);
-        }
-
+    public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
+            deviceService.getSingleDevice(id)
+                    .orElseThrow(() -> new DeviceNotFoundException("ID " + id));
+            if (Objects.equals(deviceService.deleteOneDevice(id), id))
+                return ResponseEntity.ok("Device with ID " + id + " has been deleted.");
+       else return ResponseEntity.ok("Device with ID " + id + " is in USE and can not be deleted.");
     }
 
 }
