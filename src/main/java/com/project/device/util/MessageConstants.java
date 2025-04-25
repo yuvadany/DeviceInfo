@@ -18,7 +18,8 @@ public final class MessageConstants {
     public static final String CAN_NOT_DELETED =  " is in USE and can not be deleted.";
     public static final String SWAGGER_TITLE =  " REST APIs capable of persisting and managing device resources";
     public static final String HOME_CONTROLLER =  " Home Controller";
-    public static final String ADD_API =  "Api to add a Device";
+    public static final String ADD_API =  "Api to add a device";
+    public static final String ADD_DESC =  "Adds a new device";
     public static final String FETCH_ALL_API =  "Api to fetch all Devices";
     public static final String FETCH_DEVICE_BY_STATE =  "Api to fetch one Device based on State";
     public static final String FETCH_DEVICE_BY_ID =  "Api to fetch one Device based on ID";
