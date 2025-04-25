@@ -9,9 +9,9 @@ This is a Spring Boot Project for adding and managing Devices
 - Docker 28 (for containerized runs and Testcontainers)
 
 🚀 Getting Started
-Run the application locally
-mvn clean install
-mvn spring-boot:run
+- Run the application locally
+- mvn clean install
+- mvn spring-boot:run
 
 
 📁 Key Dependencies
@@ -25,27 +25,27 @@ mvn spring-boot:run
 
 
 🧪 Running Tests
-mvn test
+- mvn test
 
 
 🐳 Containerized Setup with Docker Compose
 📂 File Structure
-docker-compose file expects all the below files in the project root.
-Place the following files in your project root (same level as pom.xml):
-Dockerfile 
-docker-compose.yml
-and 
-device-0.0.1-SNAPSHOT.jar
-Commands:
-docker-compose build
-docker-compose up
+- docker-compose file expects all the below files in the project root.
+- Place the following files in your project root (same level as pom.xml):
+- Dockerfile 
+- docker-compose.yml and 
+- device-0.0.1-SNAPSHOT.jar
+- Commands:
+- docker-compose build
+- docker-compose up
 
 🔌 Sample APIs
-Get All Devices
-Request:
-GET /v1/devices/getAllDevices
+- Get All Devices
+- Request:
+- GET /v1/devices/getAllDevices
+- 
 Response:
-
+- 
 [{
 "id": 78,
 "name": "mobile",
@@ -61,5 +61,5 @@ Response:
 "creationTime": "2025-04-25T15:48:31.064823"
 }]
 
-API documentation:
-More endpoints can be explored via the http://localhost:1214/swagger-ui.html
+- API documentation:
+- More endpoints can be explored via the http://localhost:1214/swagger-ui.html
