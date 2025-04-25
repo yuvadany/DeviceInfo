@@ -8,6 +8,16 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "devices")
 public class Device {
+    public Device(){
+
+    }
+        public Device(Long id, String name, String brand, State state, LocalDateTime creationTime, Integer version) {
+        this.id = id;
+        this.name = name;
+        this.brand = brand;
+        this.state = state;
+        this.creationTime = creationTime;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +36,7 @@ public class Device {
     //added for the error org.springframework.orm.ObjectOptimisticLockingFailureException: Row was updated or deleted by another transaction
     @Version
     private Integer version;
+
 
     @PrePersist
     protected void onCreate() {
