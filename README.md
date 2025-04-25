@@ -46,7 +46,8 @@ This is a Spring Boot Project for adding and managing Devices
 - Get All Devices
 - Request:
 - GET /v1/devices/getAllDevices
-- 
+
+  
 Response:
 - 
 [{
