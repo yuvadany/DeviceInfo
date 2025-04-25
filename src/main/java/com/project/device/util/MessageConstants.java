@@ -7,7 +7,7 @@ public final class MessageConstants {
     public static final String DEVICE_NOT_FOUND = "No device found with ";
     public static final String DEVICE_ADD_ERROR = "Device can not be added due to the error ";
     public static final String TRY_AGAIN = "Something went wrong! PLease try again later ";
-    public static final String DEVICE_IN_USE = "Device can not be updated when its in state IN_USE ";
+    public static final String DEVICE_IN_USE = "Device can not be updated when its in state IN_USE";
     public static final String IN_USE = "IN_USE";
     public static final String ID = "ID ";
     public static final String BRAND = "brand ";
