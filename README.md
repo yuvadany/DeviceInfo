@@ -29,12 +29,15 @@ This is a Spring Boot Project for adding and managing Devices
 
 
 🐳 Containerized Setup with Docker Compose
+
 📂 File Structure
 - docker-compose file expects all the below files in the project root.
 - Place the following files in your project root (same level as pom.xml):
-- Dockerfile 
-- docker-compose.yml and 
-- device-0.0.1-SNAPSHOT.jar
+1. Dockerfile 
+2. docker-compose.yml and 
+3. device-0.0.1-SNAPSHOT.jar
+
+  
 - Commands:
 - docker-compose build
 - docker-compose up
