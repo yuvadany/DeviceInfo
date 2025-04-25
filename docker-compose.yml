@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: springboot_device_app
     ports:
-      - "1213:1213"
+      - "1214:1214"
     depends_on:
       - postgres
     environment:
