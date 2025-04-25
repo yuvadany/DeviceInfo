@@ -6,6 +6,7 @@ public final class MessageConstants {
 
     public static final String DEVICE_NOT_FOUND = "No device found with ";
     public static final String DEVICE_ADD_ERROR = "Device can not be added due to the error ";
+    public static final String INTERNAL_SERVER_ERROR = "Internal server error";
     public static final String TRY_AGAIN = "Something went wrong! PLease try again later ";
     public static final String DEVICE_IN_USE = "Device can not be updated when its in state IN_USE";
     public static final String IN_USE = "IN_USE";
@@ -28,4 +29,12 @@ public final class MessageConstants {
     public static final String DELETE_API =  "Api to delete a Device";
     public static final String FETCH_ONE_RANDOM_DEVICE =  "Api to fetch one Random Device";
     public static final String HOME_CONTROLLER_DESCRIPTION =  "Contains addDevice, fetchSingleRandomDevice, fetchDeviceById,fetchDeviceByBrand, fetchDeviceByState, updateDevice and deleteDevice Apis ";
+    public static final String HTTP_STATUS_OK =  "200";
+    public static final String HTTP_STATUS_CREATED =  "201";
+    public static final String HTTP_STATUS_NO_CONTENT =  "204";
+    public static final String HTTP_STATUS_NOT_FOUND =  "404";
+    public static final String HTTP_STATUS_NOT_ACCEPTABLE =  "406";
+    public static final String HTTP_STATUS_INTERNAL_SERVER_ERROR =  "500";
+
+
 }
