@@ -7,6 +7,9 @@ import com.project.device.util.DeviceNotFoundException;
 import com.project.device.util.MessageConstants;
 import com.project.device.util.TryAgainLaterException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -28,7 +31,15 @@ public class HomeController {
     }
 
     @PostMapping("/addDevice")
-    @Operation(summary = MessageConstants.ADD_API)
+    @Operation(
+            summary = MessageConstants.ADD_API,
+            description = MessageConstants.ADD_DESC,
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input provided"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     public ResponseEntity<Device> addDevice(@RequestBody Device device) {
         try {
             Device savedDevice = deviceService.addDevice(device);

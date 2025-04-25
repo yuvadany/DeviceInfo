@@ -1,6 +1,7 @@
 package com.project.device.model;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -21,16 +22,19 @@ public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(hidden = true)
     private Long id;
-
+    @Schema(description = "", example = "Modem")
     private String name;
-
+    @Schema(description = "", example = "TATA")
     private String brand;
 
     @Enumerated(EnumType.STRING)
+    @Schema(description = "", example = "AVAILABLE")
     private State state;
 
     @Column(name = "creation_time", updatable = false)
+    @Schema(description = "", example = "2025-04-25T13:03:41.550Z")
     private LocalDateTime creationTime;
 
     //added for the error org.springframework.orm.ObjectOptimisticLockingFailureException: Row was updated or deleted by another transaction
