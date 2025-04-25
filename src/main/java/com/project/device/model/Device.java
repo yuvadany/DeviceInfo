@@ -27,7 +27,7 @@ public class Device {
     private Long id;
     @Schema(description = "", example = "Modem")
     private String name;
-    @Schema(description = "", example = "TATA")
+    @Schema(description = "", example = "ABC")
     private String brand;
 
     @Enumerated(EnumType.STRING)
