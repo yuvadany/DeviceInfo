@@ -35,10 +35,13 @@ public class HomeController {
             summary = MessageConstants.ADD_API,
             description = MessageConstants.ADD_DESC,
             responses = {
-                    @ApiResponse(responseCode = "201", description = "", content = @Content(schema = @Schema(implementation = Device.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid input provided"),
-                    @ApiResponse(responseCode = "500", description = "Internal server error")
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_CREATED, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_ACCEPTABLE, description = MessageConstants.DEVICE_ADD_ERROR,
+                            content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_INTERNAL_SERVER_ERROR, description = MessageConstants.INTERNAL_SERVER_ERROR,
+                            content = @Content())
             }
+
     )
     public ResponseEntity<Device> addDevice(@RequestBody Device device) {
         try {
@@ -52,7 +55,17 @@ public class HomeController {
     }
 
     @GetMapping("/fetchSingleDevice/{id}")
-    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_ID)
+    @Operation(
+            summary = MessageConstants.FETCH_DEVICE_BY_ID,
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_ADD_ERROR,
+                            content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_INTERNAL_SERVER_ERROR, description = MessageConstants.INTERNAL_SERVER_ERROR,
+                            content = @Content())
+            }
+    )
     public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
         Device device = deviceService.getSingleDevice(id)
                 .orElseThrow(() -> new DeviceNotFoundException(MessageConstants.ID + id));
@@ -60,7 +73,14 @@ public class HomeController {
     }
 
     @GetMapping("/fetchOneRandomDevice")
-    @Operation(summary = MessageConstants.FETCH_ONE_RANDOM_DEVICE)
+    @Operation(summary = MessageConstants.FETCH_ONE_RANDOM_DEVICE,
+    description = "",
+    responses = {
+        @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+        @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.TRY_AGAIN,
+                content = @Content())
+    }
+    )
     public ResponseEntity<Device> fetchOneRandomDevice() {
         try {
             Device randomDevice = deviceService.getAnyDevice();
@@ -72,7 +92,14 @@ public class HomeController {
     }
 
     @GetMapping("/fetchByBrand")
-    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_BRAND)
+    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_BRAND,
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.BRAND,
+                            content = @Content())
+            }
+    )
     public ResponseEntity<List<Device>> fetchDeviceByBrand(@RequestParam String brand) {
         List<Device> device = deviceService.getDeviceByBrand(brand);
         if (!device.isEmpty())
@@ -82,7 +109,14 @@ public class HomeController {
     }
 
     @GetMapping("/fetchByState")
-    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_STATE)
+    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_STATE,
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.STATE,
+                            content = @Content())
+            }
+    )
     public ResponseEntity<List<Device>> fetchDeviceByState(@RequestParam String state) {
         List<Device> device = deviceService.getDeviceByState(state);
         if (!device.isEmpty())
@@ -94,7 +128,14 @@ public class HomeController {
 
 
     @GetMapping("/getAllDevices")
-    @Operation(summary = MessageConstants.FETCH_ALL_API)
+    @Operation(summary = MessageConstants.FETCH_ALL_API,
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NO_CONTENT, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.STATE,
+                            content = @Content())
+            }
+    )
     public ResponseEntity<List<Device>> getAllDevices() {
         List<Device> devices = deviceService.getAllDevicesInfo();
         if (devices.isEmpty()) {
@@ -104,7 +145,16 @@ public class HomeController {
     }
 
     @PutMapping("/updateDevice/{id}")
-    @Operation(summary = MessageConstants.UPDATE_API)
+    @Operation(summary = MessageConstants.UPDATE_API,
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description =MessageConstants.DEVICE_WITH_ID + MessageConstants.UPDATED, content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = MessageConstants.DEVICE_IN_USE,
+                            content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.ID,
+                            content = @Content())
+            }
+    )
     public ResponseEntity<String> updateDevice(@PathVariable Long id,
                                                @RequestBody Device newDeviceData) throws DeviceNotFoundException {
         var deviceOptional = deviceService.getSingleDevice(id);
@@ -119,7 +169,15 @@ public class HomeController {
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
-    @Operation(summary = MessageConstants.DELETE_API)
+    @Operation(summary = MessageConstants.DELETE_API,
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description =MessageConstants.DEVICE_WITH_ID + MessageConstants.DELETED, content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = MessageConstants.DEVICE_WITH_ID + MessageConstants.CAN_NOT_DELETED,
+                            content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.ID,
+                            content = @Content())
+            })
     public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
         var deviceOptional = deviceService.getSingleDevice(id);
         if (deviceOptional.isPresent()) {
