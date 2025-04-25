@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/devices")
-@Tag(name=MessageConstants.HOME_CONTROLLER,description = MessageConstants.HOME_CONTROLLER_DESCRIPTION)
+@Tag(name = MessageConstants.HOME_CONTROLLER, description = MessageConstants.HOME_CONTROLLER_DESCRIPTION)
 public class HomeController {
 
     private final DeviceService deviceService;
@@ -104,7 +104,7 @@ public class HomeController {
                 return ResponseEntity.ok(MessageConstants.DEVICE_IN_USE);
             }
         } else
-            throw new DeviceNotFoundException(MessageConstants.ID+ id);
+            throw new DeviceNotFoundException(MessageConstants.ID + id);
     }
 
     @DeleteMapping("/deleteOneDevice/{id}")
@@ -115,7 +115,7 @@ public class HomeController {
             if (deviceService.deleteOneDevice(id, deviceOptional.get())) {
                 return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.DELETED);
             } else {
-                return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID+ id + MessageConstants.CAN_NOT_DELETED);
+                return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.CAN_NOT_DELETED);
             }
         } else
             throw new DeviceNotFoundException(MessageConstants.ID + id);
