@@ -9,10 +9,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "devices")
 public class Device {
-    public Device(){
+    public Device() {
 
     }
-        public Device(Long id, String name, String brand, State state, LocalDateTime creationTime, Integer version) {
+
+    public Device(Long id, String name, String brand, State state, LocalDateTime creationTime, Integer version) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -46,8 +47,6 @@ public class Device {
     protected void onCreate() {
         creationTime = LocalDateTime.now();
     }
-
-    // Getter & Setter
 
     public Long getId() {
         return id;
