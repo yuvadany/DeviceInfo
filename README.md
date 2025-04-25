@@ -52,14 +52,14 @@ Response:
 [{
 "id": 78,
 "name": "mobile",
-"brand": "CISCO",
+"brand": "ABC",
 "state": "IN_USE",
 "creationTime": "2025-04-25T14:11:06.634885"
 },
 {
 "id": 82,
 "name": "Modem",
-"brand": "CISCO",
+"brand": "ABC",
 "state": "AVAILABLE",
 "creationTime": "2025-04-25T15:48:31.064823"
 }]
