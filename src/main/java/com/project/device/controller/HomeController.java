@@ -30,7 +30,7 @@ public class HomeController {
         this.deviceService = deviceService;
     }
 
-    @PostMapping("/addDevice")
+    @PostMapping("/device")
     @Operation(
             summary = MessageConstants.ADD_API,
             description = MessageConstants.ADD_DESC,
@@ -54,7 +54,7 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/fetchSingleDevice/{id}")
+    @GetMapping("/{id}")
     @Operation(
             summary = MessageConstants.FETCH_DEVICE_BY_ID,
             description = "",
@@ -127,7 +127,7 @@ public class HomeController {
     }
 
 
-    @GetMapping("/getAllDevices")
+    @GetMapping("/all")
     @Operation(summary = MessageConstants.FETCH_ALL_API,
             description = "",
             responses = {
@@ -144,7 +144,7 @@ public class HomeController {
         return ResponseEntity.ok(devices);
     }
 
-    @PutMapping("/updateDevice/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = MessageConstants.UPDATE_API,
             description = "",
             responses = {
@@ -168,7 +168,7 @@ public class HomeController {
             throw new DeviceNotFoundException(MessageConstants.ID + id);
     }
 
-    @DeleteMapping("/deleteOneDevice/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = MessageConstants.DELETE_API,
             description = "",
             responses = {
