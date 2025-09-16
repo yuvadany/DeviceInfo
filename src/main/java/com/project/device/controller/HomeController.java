@@ -1,6 +1,6 @@
 package com.project.device.controller;
 
-import com.project.device.model.Device;
+import com.project.device.dto.DeviceDTO;
 import com.project.device.service.DeviceService;
 import com.project.device.util.DeviceAddingException;
 import com.project.device.util.DeviceNotFoundException;
@@ -35,7 +35,7 @@ public class HomeController {
             summary = MessageConstants.ADD_API,
             description = MessageConstants.ADD_DESC,
             responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_CREATED, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_CREATED, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_ACCEPTABLE, description = MessageConstants.DEVICE_ADD_ERROR,
                             content = @Content()),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_INTERNAL_SERVER_ERROR, description = MessageConstants.INTERNAL_SERVER_ERROR,
@@ -43,10 +43,10 @@ public class HomeController {
             }
 
     )
-    public ResponseEntity<Device> addDevice(@RequestBody Device device) {
+    public ResponseEntity<DeviceDTO> addDevice(@RequestBody DeviceDTO DeviceDTO) {
         try {
-            Device savedDevice = deviceService.addDevice(device);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedDevice);
+            DeviceDTO savedDeviceDTO = deviceService.addDevice(DeviceDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedDeviceDTO);
         } catch (DataIntegrityViolationException e) {
             throw new DeviceAddingException(Objects.requireNonNull(e.getRootCause()).getMessage());
         } catch (Exception e) {
@@ -59,89 +59,70 @@ public class HomeController {
             summary = MessageConstants.FETCH_DEVICE_BY_ID,
             description = "",
             responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_ADD_ERROR,
                             content = @Content()),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_INTERNAL_SERVER_ERROR, description = MessageConstants.INTERNAL_SERVER_ERROR,
                             content = @Content())
             }
     )
-    public ResponseEntity<Device> fetchSingleDevice(@PathVariable Long id) {
-        Device device = deviceService.getSingleDevice(id)
+    public ResponseEntity<DeviceDTO> fetchSingleDevice(@PathVariable Long id) {
+        DeviceDTO DeviceDTO = deviceService.getSingleDevice(id)
                 .orElseThrow(() -> new DeviceNotFoundException(MessageConstants.ID + id));
-        return ResponseEntity.ok(device);
+        return ResponseEntity.ok(DeviceDTO);
     }
 
-    @GetMapping("/fetchOneRandomDevice")
+    @GetMapping("/randomDevice")
     @Operation(summary = MessageConstants.FETCH_ONE_RANDOM_DEVICE,
     description = "",
     responses = {
-        @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+        @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
         @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.TRY_AGAIN,
                 content = @Content())
     }
     )
-    public ResponseEntity<Device> fetchOneRandomDevice() {
+    public ResponseEntity<DeviceDTO> fetchOneRandomDevice() {
         try {
-            Device randomDevice = deviceService.getAnyDevice();
-            return ResponseEntity.status(HttpStatus.OK).body(randomDevice);
+            DeviceDTO randomDeviceDTO = deviceService.getAnyDevice();
+            return ResponseEntity.status(HttpStatus.OK).body(randomDeviceDTO);
         } catch (Exception e) {
             throw new TryAgainLaterException(e.getMessage());
         }
 
     }
 
-    @GetMapping("/fetchByBrand")
-    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_BRAND,
+    @GetMapping("")
+    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_BRAND_STATE_ID,
             description = "",
             responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.BRAND,
                             content = @Content())
             }
     )
-    public ResponseEntity<List<Device>> fetchDeviceByBrand(@RequestParam String brand) {
-        List<Device> device = deviceService.getDeviceByBrand(brand);
-        if (!device.isEmpty())
-            return ResponseEntity.ok(device);
+    public ResponseEntity<List<DeviceDTO>> fetchDeviceByBrand(@RequestParam(required = false)  Long id, @RequestParam(required = false) String brand, @RequestParam(required = false) String state) {
+        List<DeviceDTO> DeviceDTO = deviceService.getDeviceByBrand(brand,state,id);
+        if (!DeviceDTO.isEmpty())
+            return ResponseEntity.ok(DeviceDTO);
         else
             throw new DeviceNotFoundException(MessageConstants.BRAND + brand);
     }
-
-    @GetMapping("/fetchByState")
-    @Operation(summary = MessageConstants.FETCH_DEVICE_BY_STATE,
-            description = "",
-            responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.STATE,
-                            content = @Content())
-            }
-    )
-    public ResponseEntity<List<Device>> fetchDeviceByState(@RequestParam String state) {
-        List<Device> device = deviceService.getDeviceByState(state);
-        if (!device.isEmpty())
-            return ResponseEntity.ok(device);
-        else
-            throw new DeviceNotFoundException(MessageConstants.STATE + state);
-
-    }
-
 
     @GetMapping("/all")
     @Operation(summary = MessageConstants.FETCH_ALL_API,
             description = "",
             responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = Device.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NO_CONTENT, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.STATE,
                             content = @Content())
             }
     )
-    public ResponseEntity<List<Device>> getAllDevices() {
-        List<Device> devices = deviceService.getAllDevicesInfo();
-        if (devices.isEmpty()) {
+    public ResponseEntity<List<DeviceDTO>> getAllDevices() {
+        List<DeviceDTO> deviceEntities = deviceService.getAllDevicesInfo();
+        if (deviceEntities.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.ok(devices);
+        return ResponseEntity.ok(deviceEntities);
     }
 
     @PutMapping("/{id}")
@@ -156,10 +137,10 @@ public class HomeController {
             }
     )
     public ResponseEntity<String> updateDevice(@PathVariable Long id,
-                                               @RequestBody Device newDeviceData) throws DeviceNotFoundException {
+                                               @RequestBody DeviceDTO newDeviceDTOData) throws DeviceNotFoundException {
         var deviceOptional = deviceService.getSingleDevice(id);
         if (deviceOptional.isPresent()) {
-            if (deviceService.updateDevice(deviceOptional.get(), newDeviceData)) {
+            if (deviceService.updateDevice(deviceOptional.get(), newDeviceDTOData)) {
                 return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.UPDATED);
             } else {
                 return ResponseEntity.ok(MessageConstants.DEVICE_IN_USE);

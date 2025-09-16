@@ -1,4 +1,4 @@
-package com.project.device.model;
+package com.project.device.entity;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "devices")
-public class Device {
-    public Device() {
+public class DeviceEntity {
+    public DeviceEntity() {
 
     }
 
-    public Device(Long id, String name, String brand, State state, LocalDateTime creationTime, Integer version) {
+    public DeviceEntity(Long id, String name, String brand, State state, LocalDateTime creationTime, Integer version) {
         this.id = id;
         this.name = name;
         this.brand = brand;

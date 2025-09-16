@@ -1,6 +1,6 @@
 package com.project.device.controller;
 
-import com.project.device.model.Device;
+import com.project.device.entity.DeviceEntity;
 import com.project.device.repo.DeviceRepository;
 import com.project.device.util.MessageConstants;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,13 +57,13 @@ public class HomeControllerTest {
 
     @Test
     void shouldFetchSingleDevice() throws Exception {
-        Device device = new Device(null, "Router", "CISCO", Device.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntity = new DeviceEntity(null, "Router", "CISCO", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
 
-        Device savedDevice = deviceRepository.save(device);
+        DeviceEntity savedDeviceEntity = deviceRepository.save(deviceEntity);
 
-        mockMvc.perform(get("/v1/devices/fetchSingleDevice/" + savedDevice.getId()))
+        mockMvc.perform(get("/v1/devices/fetchSingleDevice/" + savedDeviceEntity.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(savedDevice.getId()))
+                .andExpect(jsonPath("$.id").value(savedDeviceEntity.getId()))
                 .andExpect(jsonPath("$.name").value("Router"))
                 .andExpect(jsonPath("$.brand").value("CISCO"))
                 .andExpect(jsonPath("$.state").value("AVAILABLE"))
@@ -78,11 +78,11 @@ public class HomeControllerTest {
 
     @Test
     void shouldFetchDevicesByBrand() throws Exception {
-        Device deviceRouter = new Device(null, "Router", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceSwitch = new Device(null, "Switch", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityRouter = new DeviceEntity(null, "Router", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntitySwitch = new DeviceEntity(null, "Switch", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
 
-        deviceRepository.save(deviceRouter);
-        deviceRepository.save(deviceSwitch);
+        deviceRepository.save(deviceEntityRouter);
+        deviceRepository.save(deviceEntitySwitch);
 
         mockMvc.perform(get("/v1/devices/fetchByBrand?brand=Cisco"))
                 .andExpect(status().isOk())
@@ -103,13 +103,13 @@ public class HomeControllerTest {
     @Test
     void shouldFetchDevicesByStateWhenStateExists() throws Exception {
         // Prepare test data
-        Device deviceRouter = new Device(null, "Router", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceSwitch = new Device(null, "Switch", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceServer = new Device(null, "Server", "Dell", Device.State.IN_USE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityRouter = new DeviceEntity(null, "Router", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntitySwitch = new DeviceEntity(null, "Switch", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityServer = new DeviceEntity(null, "Server", "Dell", DeviceEntity.State.IN_USE, LocalDateTime.now(), null);
 
-        deviceRepository.save(deviceRouter);
-        deviceRepository.save(deviceSwitch);
-        deviceRepository.save(deviceServer);
+        deviceRepository.save(deviceEntityRouter);
+        deviceRepository.save(deviceEntitySwitch);
+        deviceRepository.save(deviceEntityServer);
         mockMvc.perform(get("/v1/devices/fetchByState?state=AVAILABLE"))
                 .andExpect(status().isOk()) // Expecting status 200 OK
                 .andExpect(jsonPath("$.length()").value(2))
@@ -127,13 +127,13 @@ public class HomeControllerTest {
 
     @Test
     void shouldReturnAllDevicesWhenDevicesExist() throws Exception {
-        Device deviceRouter = new Device(null, "Router", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceSwitch = new Device(null, "Switch", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceModem = new Device(null, "Modem", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityRouter = new DeviceEntity(null, "Router", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntitySwitch = new DeviceEntity(null, "Switch", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityModem = new DeviceEntity(null, "Modem", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
 
-        deviceRepository.save(deviceRouter);
-        deviceRepository.save(deviceSwitch);
-        deviceRepository.save(deviceModem);
+        deviceRepository.save(deviceEntityRouter);
+        deviceRepository.save(deviceEntitySwitch);
+        deviceRepository.save(deviceEntityModem);
 
         mockMvc.perform(get("/v1/devices/getAllDevices"))
                 .andExpect(status().isOk())
@@ -152,26 +152,26 @@ public class HomeControllerTest {
 
     @Test
     void shouldUpdateDeviceSuccessfully() throws Exception {
-        Device device = new Device(null, "Router", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device savedDevice = deviceRepository.save(device);
+        DeviceEntity deviceEntity = new DeviceEntity(null, "Router", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity savedDeviceEntity = deviceRepository.save(deviceEntity);
 
-        Device updatedDeviceData = new Device(savedDevice.getId(), "Updated Router", "Cisco", Device.State.INACTIVE, LocalDateTime.now(), 1);
+        DeviceEntity updatedDeviceEntityData = new DeviceEntity(savedDeviceEntity.getId(), "Updated Router", "Cisco", DeviceEntity.State.INACTIVE, LocalDateTime.now(), 1);
 
-        mockMvc.perform(put("/v1/devices/updateDevice/" + savedDevice.getId())
+        mockMvc.perform(put("/v1/devices/updateDevice/" + savedDeviceEntity.getId())
                         .contentType("application/json")
-                        .content("{\"id\":" + savedDevice.getId() + ",\"name\":\"Updated Router\",\"brand\":\"Cisco\",\"state\":\"INACTIVE\",\"creationTime\":\"" + LocalDateTime.now() + "\"}"))
+                        .content("{\"id\":" + savedDeviceEntity.getId() + ",\"name\":\"Updated Router\",\"brand\":\"Cisco\",\"state\":\"INACTIVE\",\"creationTime\":\"" + LocalDateTime.now() + "\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Device with ID  " + savedDevice.getId() + " has been updated!"));
+                .andExpect(jsonPath("$").value("Device with ID  " + savedDeviceEntity.getId() + " has been updated!"));
     }
 
     @Test
     void shouldReturnConflictIfDeviceInUse() throws Exception {
-        Device device = new Device(null, "Router", "Cisco", Device.State.IN_USE, LocalDateTime.now(), null);
-        Device savedDevice = deviceRepository.save(device);
+        DeviceEntity deviceEntity = new DeviceEntity(null, "Router", "Cisco", DeviceEntity.State.IN_USE, LocalDateTime.now(), null);
+        DeviceEntity savedDeviceEntity = deviceRepository.save(deviceEntity);
 
-        mockMvc.perform(put("/v1/devices/updateDevice/" + savedDevice.getId())
+        mockMvc.perform(put("/v1/devices/updateDevice/" + savedDeviceEntity.getId())
                         .contentType("application/json")
-                        .content("{\"id\":" + savedDevice.getId() + ",\"name\":\"Updated Router\",\"brand\":\"Cisco\",\"state\":\"IN_USE\",\"creationTime\":\"" + LocalDateTime.now() + "\"}"))
+                        .content("{\"id\":" + savedDeviceEntity.getId() + ",\"name\":\"Updated Router\",\"brand\":\"Cisco\",\"state\":\"IN_USE\",\"creationTime\":\"" + LocalDateTime.now() + "\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(MessageConstants.DEVICE_IN_USE));
     }
@@ -186,13 +186,13 @@ public class HomeControllerTest {
 
     @Test
     void shouldFetchOneRandomDeviceSuccessfully() throws Exception {
-        Device deviceRouter = new Device(null, "Router", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceSwitch = new Device(null, "Switch", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
-        Device deviceModem = new Device(null, "Modem", "Cisco", Device.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityRouter = new DeviceEntity(null, "Router", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntitySwitch = new DeviceEntity(null, "Switch", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
+        DeviceEntity deviceEntityModem = new DeviceEntity(null, "Modem", "Cisco", DeviceEntity.State.AVAILABLE, LocalDateTime.now(), null);
 
-        deviceRepository.save(deviceRouter);
-        deviceRepository.save(deviceSwitch);
-        deviceRepository.save(deviceModem);
+        deviceRepository.save(deviceEntityRouter);
+        deviceRepository.save(deviceEntitySwitch);
+        deviceRepository.save(deviceEntityModem);
 
         mockMvc.perform(get("/v1/devices/fetchOneRandomDevice"))
                 .andExpect(status().isOk())

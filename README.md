@@ -34,7 +34,7 @@
 - Place the following files in your project root (same level as pom.xml):
 1. Dockerfile 
 2. docker-compose.yml and 
-3. device-0.0.1-SNAPSHOT.jar
+3. deviceEntity-0.0.1-SNAPSHOT.jar
 
   
 - Commands:
@@ -44,7 +44,7 @@
 🔌 Sample APIs
 - Get All Devices
 - Request:
-- GET /v1/devices/getAllDevices
+- GET /v1/deviceEntities/getAllDevices
 
   
 Response:

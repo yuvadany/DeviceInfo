@@ -22,9 +22,8 @@ public final class MessageConstants {
     public static final String ADD_API =  "Api to add a device";
     public static final String ADD_DESC =  "Adds a new device";
     public static final String FETCH_ALL_API =  "Api to fetch all Devices";
-    public static final String FETCH_DEVICE_BY_STATE =  "Api to fetch one Device based on State";
     public static final String FETCH_DEVICE_BY_ID =  "Api to fetch one Device based on ID";
-    public static final String FETCH_DEVICE_BY_BRAND =  "Api to fetch one Device based on Brand";
+    public static final String FETCH_DEVICE_BY_BRAND_STATE_ID =  "Api to fetch one Device based on Brand or State or ID";
     public static final String UPDATE_API =  "Api to update a Device";
     public static final String DELETE_API =  "Api to delete a Device";
     public static final String FETCH_ONE_RANDOM_DEVICE =  "Api to fetch one Random Device";

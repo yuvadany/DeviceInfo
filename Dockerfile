@@ -1,5 +1,5 @@
 FROM eclipse-temurin:21
 WORKDIR /app
-COPY *.jar device-app.jar
+COPY *.jar deviceEntity-app.jar
 EXPOSE 1214
-ENTRYPOINT ["java", "-jar", "device-app.jar"]
+ENTRYPOINT ["java", "-jar", "deviceEntity-app.jar"]
