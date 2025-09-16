@@ -5,7 +5,10 @@ import com.project.device.entity.DeviceEntity;
 import com.project.device.repo.DeviceRepository;
 import com.project.device.util.DeviceMapper;
 import com.project.device.util.MessageConstants;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +38,8 @@ public class DeviceService {
         return deviceRepository.findByFilter(brand, state, id).stream().map(deviceMapper::toDTO).toList();
     }
 
-    public List<DeviceDTO> getAllDevicesInfo() {
-        return deviceRepository.findAll().stream().map(deviceMapper::toDTO).toList();
+    public Page<DeviceDTO> getAllDevicesInfo(Pageable pageable) {
+        return deviceRepository.findAll(pageable).map(deviceMapper::toDTO);
     }
 
     public List<DeviceEntity> getDeviceByState(String state) {
@@ -47,6 +50,7 @@ public class DeviceService {
         return deviceRepository.findById(id).map(deviceMapper::toDTO);
     }
 
+    @Transactional
     public boolean deleteOneDevice(Long id, DeviceDTO selectedDeviceDTO) {
         if (!MessageConstants.IN_USE.equalsIgnoreCase(String
                 .valueOf(selectedDeviceDTO.getState()))) {

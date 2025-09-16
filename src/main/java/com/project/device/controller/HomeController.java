@@ -12,6 +12,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -117,8 +120,12 @@ public class HomeController {
                             content = @Content())
             }
     )
-    public ResponseEntity<List<DeviceDTO>> getAllDevices() {
-        List<DeviceDTO> deviceEntities = deviceService.getAllDevicesInfo();
+    public ResponseEntity<Page<DeviceDTO>> getAllDevices(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DeviceDTO> deviceEntities = deviceService.getAllDevicesInfo(pageable);
         if (deviceEntities.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
