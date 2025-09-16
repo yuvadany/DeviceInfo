@@ -77,12 +77,12 @@ public class HomeController {
 
     @GetMapping("/randomDevice")
     @Operation(summary = MessageConstants.FETCH_ONE_RANDOM_DEVICE,
-    description = "",
-    responses = {
-        @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
-        @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.TRY_AGAIN,
-                content = @Content())
-    }
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.TRY_AGAIN,
+                            content = @Content())
+            }
     )
     public ResponseEntity<DeviceDTO> fetchOneRandomDevice() {
         try {
@@ -99,12 +99,12 @@ public class HomeController {
             description = "",
             responses = {
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.BRAND,
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND + MessageConstants.BRAND,
                             content = @Content())
             }
     )
-    public ResponseEntity<List<DeviceDTO>> fetchDeviceByBrand(@RequestParam(required = false)  Long id, @RequestParam(required = false) String brand, @RequestParam(required = false) String state) {
-        List<DeviceDTO> DeviceDTO = deviceService.getDeviceByBrand(brand,state,id);
+    public ResponseEntity<List<DeviceDTO>> fetchDeviceByBrand(@RequestParam(required = false) Long id, @RequestParam(required = false) String brand, @RequestParam(required = false) String state) {
+        List<DeviceDTO> DeviceDTO = deviceService.getDeviceByFilter(brand, state, id);
         if (!DeviceDTO.isEmpty())
             return ResponseEntity.ok(DeviceDTO);
         else
@@ -116,7 +116,7 @@ public class HomeController {
             description = "",
             responses = {
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = "", content = @Content(schema = @Schema(implementation = DeviceDTO.class))),
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NO_CONTENT, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.STATE,
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NO_CONTENT, description = MessageConstants.DEVICE_NOT_FOUND + MessageConstants.STATE,
                             content = @Content())
             }
     )
@@ -136,10 +136,10 @@ public class HomeController {
     @Operation(summary = MessageConstants.UPDATE_API,
             description = "",
             responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description =MessageConstants.DEVICE_WITH_ID + MessageConstants.UPDATED, content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = MessageConstants.DEVICE_WITH_ID + MessageConstants.UPDATED, content = @Content()),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = MessageConstants.DEVICE_IN_USE,
                             content = @Content()),
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.ID,
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND + MessageConstants.ID,
                             content = @Content())
             }
     )
@@ -160,10 +160,10 @@ public class HomeController {
     @Operation(summary = MessageConstants.DELETE_API,
             description = "",
             responses = {
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description =MessageConstants.DEVICE_WITH_ID + MessageConstants.DELETED, content = @Content()),
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = MessageConstants.DEVICE_WITH_ID + MessageConstants.DELETED, content = @Content()),
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_OK, description = MessageConstants.DEVICE_WITH_ID + MessageConstants.CAN_NOT_DELETED,
                             content = @Content()),
-                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND+MessageConstants.ID,
+                    @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND + MessageConstants.ID,
                             content = @Content())
             })
     public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {

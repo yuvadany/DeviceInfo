@@ -26,26 +26,26 @@ public class DeviceService {
         this.deviceMapper = deviceMapper;
     }
 
+    @Transactional
     public DeviceDTO addDevice(DeviceDTO deviceDTO) {
         return deviceMapper.toDTO(deviceRepository.save(deviceMapper.toEntity(deviceDTO) ));
     }
 
+    @Transactional(readOnly = true)
     public DeviceDTO getAnyDevice() {
         return deviceMapper.toDTO(deviceRepository.findAnyOneDevice());
     }
 
-    public List<DeviceDTO> getDeviceByBrand(String brand, String state, Long id) {
+    public List<DeviceDTO> getDeviceByFilter(String brand, String state, Long id) {
         return deviceRepository.findByFilter(brand, state, id).stream().map(deviceMapper::toDTO).toList();
     }
 
+    @Transactional(readOnly = true)
     public Page<DeviceDTO> getAllDevicesInfo(Pageable pageable) {
         return deviceRepository.findAll(pageable).map(deviceMapper::toDTO);
     }
 
-    public List<DeviceEntity> getDeviceByState(String state) {
-        return deviceRepository.findByState(state);
-    }
-
+    @Transactional(readOnly = true)
     public Optional<DeviceDTO> getSingleDevice(Long id) {
         return deviceRepository.findById(id).map(deviceMapper::toDTO);
     }
@@ -60,6 +60,7 @@ public class DeviceService {
             return false;
     }
 
+    @Transactional
     public boolean updateDevice(DeviceDTO existingDeviceDTO, DeviceDTO newDeviceDTOData) {
         if (!MessageConstants.IN_USE.equalsIgnoreCase(String
                 .valueOf(existingDeviceDTO.getState())) && existingDeviceDTO.getState().equals(newDeviceDTOData.getState()) && (
