@@ -166,13 +166,15 @@ public class HomeController {
                     @ApiResponse(responseCode = MessageConstants.HTTP_STATUS_NOT_FOUND, description = MessageConstants.DEVICE_NOT_FOUND + MessageConstants.ID,
                             content = @Content())
             })
+    
     public ResponseEntity<String> deleteOneDeviceById(@PathVariable Long id) {
         var deviceOptional = deviceService.getSingleDevice(id);
         if (deviceOptional.isPresent()) {
             if (deviceService.deleteOneDevice(id, deviceOptional.get())) {
                 return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.DELETED);
             } else {
-                return ResponseEntity.ok(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.CAN_NOT_DELETED);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(MessageConstants.DEVICE_WITH_ID + id + MessageConstants.CAN_NOT_DELETED);
             }
         } else
             throw new DeviceNotFoundException(MessageConstants.ID + id);
